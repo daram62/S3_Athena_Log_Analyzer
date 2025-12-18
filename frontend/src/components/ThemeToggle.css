@@ -1,0 +1,122 @@
+/* 간단한 테마 토글 버튼 - 라이트/다크 모드만 */
+.theme-toggle {
+  display: inline-block;
+}
+
+.theme-toggle-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--secondary-bg);
+  border: 2px solid var(--input-border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 14px;
+  font-weight: 500;
+  min-height: 44px; /* WCAG 터치 타겟 최소 크기 */
+  position: relative;
+  overflow: hidden;
+}
+
+/* 호버 효과 */
+.theme-toggle-button:hover {
+  background: var(--tertiary-bg);
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* 포커스 스타일 - WCAG 2.1 AA 준수 */
+.theme-toggle-button:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 1px var(--accent-primary);
+}
+
+/* 활성 상태 */
+.theme-toggle-button:active {
+  transform: translateY(0);
+  transition-duration: 0.1s;
+}
+
+/* 테마 인디케이터 애니메이션 */
+.theme-indicator {
+  font-size: 18px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+}
+
+.theme-toggle-button:hover .theme-indicator {
+  transform: scale(1.2) rotate(10deg);
+}
+
+.theme-indicator[data-theme="dark"] {
+  animation: moonGlow 2s ease-in-out infinite alternate;
+}
+
+.theme-indicator[data-theme="light"] {
+  animation: sunRays 2s ease-in-out infinite alternate;
+}
+
+@keyframes moonGlow {
+  0% { filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3)); }
+  100% { filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)); }
+}
+
+@keyframes sunRays {
+  0% { filter: drop-shadow(0 0 5px rgba(255, 193, 7, 0.3)); }
+  100% { filter: drop-shadow(0 0 10px rgba(255, 193, 7, 0.6)); }
+}
+
+/* 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+  .theme-toggle-button {
+    border-width: 3px;
+  }
+  
+  .theme-toggle-button:focus-visible {
+    outline-width: 4px;
+  }
+}
+
+/* 애니메이션 감소 설정 */
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle-button,
+  .theme-indicator {
+    transition: none;
+    animation: none;
+  }
+  
+  .theme-toggle-button:hover {
+    transform: none;
+  }
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .theme-toggle-button {
+    padding: 12px 16px;
+    min-height: 48px; /* 모바일에서 더 큰 터치 타겟 */
+  }
+  
+  .theme-indicator {
+    font-size: 20px;
+  }
+}
+
+/* 스크린 리더 전용 텍스트 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
