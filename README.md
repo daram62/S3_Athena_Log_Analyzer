@@ -1,111 +1,186 @@
-# Gen-AI Log Analyzer 🚀
+# S3 Athena Log Analyzer
 
-생성형 AI를 활용한 AWS 로그 분석 자동화 플랫폼
+[ENG](#english) | [KOR](#korean)
 
-AWS Support 엔지니어들의 로그 분석 시간을 단축하는 2가지 핵심 기능을 제공합니다.
+<a id="english"></a>
 
-## 🎯 핵심 기능
+S3 Athena Log Analyzer is an AWS log analysis platform that detects log data in S3, 
+generates Athena tables automatically, and turns natural-language questions into SQL for instant analysis.
 
-### 1️⃣ S3 → Athena 자동 셋업
-S3 버킷의 로그를 Athena에서 바로 쿼리할 수 있도록 자동 설정
+### Video
+https://youtu.be/z_0XiGukUCM?si=vdbE647_QZVkv40n
 
-```
-S3 버킷 선택 → 로그 타입 자동 감지 → Athena 테이블 자동 생성 (30초)
-```
+### What it does
 
-- ✅ 복잡한 DDL 작성 불필요
-- ✅ 로그 타입 자동 감지 (S3, CloudFront, ALB, VPC Flow)
-- ✅ 파티션 자동 최적화
+- Automatically detects log formats in an S3 bucket
+- Generates Athena DDL and tables for supported log types
+- Converts natural-language questions into SQL with Bedrock Claude
+- Executes queries in Athena and shows the results
+- Provides query history, suggested questions, and log dashboards
 
-### 2️⃣ 자연어 → SQL 자동 변환
-자연어 질문을 SQL로 변환하여 Athena에서 즉시 실행
+### Supported log types
 
-```
-"지난주 에러가 가장 많았던 날은?" → SQL 쿼리 자동 생성 → 결과 표시
-```
+- S3 Access Logs
+- CloudFront Logs
+- ALB Logs
+- VPC Flow Logs
+- CloudTrail Logs
 
-- ✅ SQL 몰라도 자연어로 질문
-- ✅ AI가 SQL 쿼리 자동 생성 (Bedrock Claude)
-- ✅ 로그 타입별 대시보드 제공
+### Tech stack
 
-## 🚀 빠른 시작
+- Backend: Python, FastAPI, Pydantic, boto3
+- Frontend: React, TypeScript
+- AWS: S3, Athena, Glue, Bedrock
+- Testing: pytest, pytest-cov
 
-### 1. 설치
+### Quick start
 
 ```bash
-# Python 의존성 설치
 pip install -r requirements.txt
-
-# 프론트엔드 의존성 설치
-cd frontend && npm install && cd ..
-```
-
-### 2. 환경 설정
-
-```bash
-cp .env.example .env
-# .env 파일에서 AWS 자격 증명 설정
-```
-
-### 3. 실행
-
-```bash
-# 백엔드 (터미널 1)
+cd frontend
+npm install
+cd ..
 make run
-
-# 프론트엔드 (터미널 2)
-cd frontend && npm start
 ```
 
-### 4. 접속
+Environment setup:
 
-브라우저에서 `http://localhost:3000` 접속
-
-## 📊 지원 로그 타입
-
-| 로그 타입 | 상태 | 설명 |
-|---------|------|------|
-| S3 Access Logs | ✅ | 표준 및 확장 형식 |
-| CloudFront Logs | ✅ | 웹 배포 로그 |
-| ALB Logs | ✅ | Application Load Balancer |
-| VPC Flow Logs | ✅ | 네트워크 트래픽 |
-
-## 🛠️ 기술 스택
-
-- **Backend**: Python 3.9+, FastAPI, Pydantic
-- **Frontend**: React, TypeScript
-- **AWS**: S3, Athena, Glue, Bedrock (Claude)
-- **Testing**: pytest (76%+ coverage)
-
-## 📁 프로젝트 구조
-
-```
-GenAI_Project/
-├── src/
-│   ├── api/           # FastAPI 엔드포인트
-│   ├── models/        # 데이터 모델
-│   ├── services/      # 비즈니스 로직
-│   └── config.py      # 설정
-├── frontend/          # React 프론트엔드
-├── tests/             # 테스트
-├── sample_logs/       # 샘플 로그 파일
-└── generated_ddls/    # 생성된 DDL 파일
+```bash
+copy .env.example .env
 ```
 
-## 📖 API 문서
+Make sure these values are configured in `.env`:
 
-서버 실행 후:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
+- `AWS_REGION`
+- `AWS_PROFILE`
+- `AWS_ATHENA_OUTPUT_LOCATION`
+- `AWS_BEDROCK_MODEL_ID`
+- `API_HOST`
+- `API_PORT`
 
-## 🔐 AWS 권한
+In a second terminal:
 
-필요한 IAM 권한:
-- S3: ListBucket, GetObject, PutObject
-- Athena: StartQueryExecution, GetQueryResults
-- Glue: GetDatabase, CreateTable, DeleteTable
-- Bedrock: InvokeModel
+```bash
+cd frontend
+npm start
+```
 
-## 📝 라이선스
+Open the app at http://localhost:3000 and the API docs at http://localhost:8000/docs.
 
-MIT License
+
+### Project structure
+
+```text
+S3_Athena_Log_Analyzer/
+├── src/                # FastAPI backend
+├── frontend/           # React frontend
+├── tests/              # Automated tests
+├── generated_ddls/     # Example/generated DDLs
+└── generate_sample_logs.py
+```
+
+### API endpoints
+
+- `GET /health`
+- `GET /api/v1/buckets`
+- `POST /api/v1/analyze-logs`
+- `POST /api/v1/tables/create`
+- `POST /api/v1/natural-language/query`
+
+### Testing
+
+```bash
+pytest
+```
+---
+
+<a id="korean"></a>
+
+S3 Athena Log Analyzer는 S3에 저장된 AWS 로그를 자동으로 감지하고 Athena 테이블을 생성한 뒤, 자연어 질문을 SQL로 변환해 바로 분석할 수 있게 해주는 플랫폼입니다.
+
+### 시연 영상
+
+https://youtu.be/z_0XiGukUCM?si=vdbE647_QZVkv40n
+
+### 주요 기능
+
+- S3 버킷의 로그 형식을 자동 감지
+- 지원 로그 타입별 Athena DDL과 테이블 자동 생성
+- Bedrock Claude 기반 자연어 → SQL 변환
+- Athena 쿼리 실행 및 결과 확인
+- 쿼리 히스토리, 추천 질문, 로그 대시보드 제공
+
+### 지원 로그 타입
+
+- S3 Access Logs
+- CloudFront Logs
+- ALB Logs
+- VPC Flow Logs
+- CloudTrail Logs
+
+### 기술 스택
+
+- Backend: Python, FastAPI, Pydantic, boto3
+- Frontend: React, TypeScript
+- AWS: S3, Athena, Glue, Bedrock
+- Testing: pytest, pytest-cov
+
+### 빠른 시작
+
+```bash
+pip install -r requirements.txt
+cd frontend
+npm install
+cd ..
+make run
+```
+
+환경 설정:
+
+```bash
+copy .env.example .env
+```
+
+`.env`에서 다음 값을 설정하세요.
+
+- `AWS_REGION`
+- `AWS_PROFILE`
+- `AWS_ATHENA_OUTPUT_LOCATION`
+- `AWS_BEDROCK_MODEL_ID`
+- `API_HOST`
+- `API_PORT`
+
+별도 터미널에서 프론트엔드를 실행합니다.
+
+```bash
+cd frontend
+npm start
+```
+
+브라우저에서 http://localhost:3000 을 열고, API 문서는 http://localhost:8000/docs 에서 확인할 수 있습니다.
+
+
+### 프로젝트 구조
+
+```text
+S3_Athena_Log_Analyzer/
+├── src/                # FastAPI 백엔드
+├── frontend/           # React 프론트엔드
+├── tests/              # 자동화 테스트
+├── generated_ddls/     # 예시/생성 DDL
+└── generate_sample_logs.py
+```
+
+### API 주요 엔드포인트
+
+- `GET /health`
+- `GET /api/v1/buckets`
+- `POST /api/v1/analyze-logs`
+- `POST /api/v1/tables/create`
+- `POST /api/v1/natural-language/query`
+
+### 테스트
+
+```bash
+pytest
+```
